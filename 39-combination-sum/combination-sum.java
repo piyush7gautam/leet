@@ -1,29 +1,19 @@
 class Solution {
-    static void find(int[] candidates, int start, int target,List<Integer> current,List<List<Integer>> result) {
-        if (target == 0) {
-            result.add(new ArrayList<>(current));
+    static void fun(int[] nums  , int target , List<Integer>c,List<List<Integer>>ans , int s){
+        if(target == 0){
+            ans.add(new ArrayList<>(c));
             return;
         }
-
-        for (int i = start; i < candidates.length; i++) {
-
-            if (candidates[i] > target) {
-                continue;
-            }
-
-            current.add(candidates[i]);
-
-            find(candidates, i, target - candidates[i], current, result);
-
-            current.remove(current.size() - 1);
+        for(int i = s ; i < nums.length ; i++){
+            if(target < nums[i]) continue;
+            c.add(nums[i]);
+             fun(nums, target - nums[i], c, ans,i);
+            c.remove(c.size() -1 );
         }
     }
-    public List<List<Integer>> combinationSum(int[] candidates, int target) {
-         List<List<Integer>> result = new ArrayList<>();
-
-        find(candidates, 0, target,
-             new ArrayList<>(), result);
-
-        return result;
+    public List<List<Integer>> combinationSum(int[] nums, int target) {
+    List<List<Integer>> ans = new ArrayList<>();
+    fun(nums,target, new ArrayList<>(), ans,0);
+    return ans;
     }
 }

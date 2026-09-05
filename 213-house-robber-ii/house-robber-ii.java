@@ -1,32 +1,26 @@
 class Solution {
-
-    static int fun(int[] nums, int start, int end) {
-        int prev2 = 0;
-        int prev1 = 0;
-
-        for (int i = start; i <= end; i++) {
-            int take = nums[i] + prev2;
-            int skip = prev1;
-
-            int curr = Math.max(take, skip);
-
-            prev2 = prev1;
-            prev1 = curr;
-        }
-
-        return prev1;
+    int[][] dp = new int[104][2];
+    int fun(int[] nums, int i, int flag) {
+        if (i >= nums.length)
+            return 0;
+        if (i == nums.length - 1 && flag == 1)
+            return 0;
+        if (dp[i][flag] != -1)
+            return dp[i][flag];
+        int newFlag = flag;
+        if (i == 0)
+            newFlag = 1;
+        int c1 = nums[i] + fun(nums, i + 2, newFlag);
+        int c2 = fun(nums, i + 1, flag);
+        int ans = Math.max(c1, c2);
+        dp[i][flag] = ans;
+        return dp[i][flag];
     }
-
     public int rob(int[] nums) {
-        int n = nums.length;
-
-        if (n == 1) {
-            return nums[0];
+        for (int i = 0; i < 104; i++) {
+            dp[i][0] = -1;
+            dp[i][1] = -1;
         }
-
-        int case1 = fun(nums, 0, n - 2);
-        int case2 = fun(nums, 1, n - 1);
-
-        return Math.max(case1, case2);
+        return fun(nums, 0, 0);
     }
 }
